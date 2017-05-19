@@ -1,0 +1,65 @@
+klasa Calc_plus:
+
+dziedziczna CalcParser:
+
+void		insertExp(string szExp);
+CALC_ERROR	parseExp();
+void		fetchTree(CalcTree * opTree);	
+
+Parser pobiera wyra¿enie i parsuje je na postaæ drzewa (struktura nale¿¹ca do interpretera). Tutaj wy³apywane s¹ b³êdy sk³adniowe. Nieznane sta³e i funkcje i wartoœci spoza dziedzin nie s¹ wy³apywane. W przypadku b³êdu zapisuje pocz¹tek i koniec b³êdu i przerywa dzia³anie. Gotowe drzewo mo¿e zostaæ pobrane.
+
+
+dziedziczna CalcInterpreter:
+
+void		insertTree(CalcTree * opTree);
+CALC_ERROR	calculateTree();
+string		fetchTidyExp();
+double		fetchResult();
+
+Interpreter wywo³uje metodê checkSymbols - sprawdza, czy wszystkie symbole (zmienne, sta³e i funkcje) s¹ zdefiniowane. Jest to metoda nale¿¹ca do wêz³a drzewa - jeœli napotka u siebie niezdefiniowany symbol, flaguje go jako b³êdny, nie przerywa dzia³ania. Jeœli nie ma b³êdów, wywo³uje na korzeniu metodê count. Jeœli metoda count zuwa¿y b³¹d na swoim elemencie, flaguje go jako b³êdny i przerywa dzia³anie. Niezale¿nie od wyniku z drzewa generowanie jest "uporz¹dkowane" dzia³anie w postaci ciagu znaków do wyœwietlenia - wywo³ywana jest metoda print na korzeniu. Metoda przy napotkaniu na odpowiedni¹ flagê "b³¹d" na swoim elemencie dodaje indeks pocz¹tku i koñca b³êdu do wektora indeksów b³êdów w ten sposób. Jeœli wszystko jest w porz¹dku mo¿na pobraæ wynik.
+
+
+enum CALC_NODE_TYPE
+{
+	NODE_NO,
+	NODE_VALUE,		// class CalcTreeValue
+	NODE_VAR,		// class CalcTreeVar
+	NODE_FUNCT,		// class CalcTreeFunct
+	NODE_BRACKETS,		// class CalcTreeBrackets
+	NODE_SUM,		// class CalcTreeSum
+	NODE_SUBTR,		// class CalcTreeSubtr
+	NODE_MULTI,		// class CalcTreeMulti
+	NODE_DIV,		// class CalcTreeDiv
+	NODE_POW,		// class CalcTreePow
+	NODE_FACTOR,		// class CalcTreeFactor
+	NODE_REM_DIV		// class CalcTreeRemDiv
+}
+
+enum CALC_OP_ASSOC
+{
+	OP_ASSOC_NO,
+	OP_ASSOC_LEFT,
+	OP_ASSOC_RIGHT
+}
+
+abstrakcyjna klasa CalcTree:
+
+CALC_ERROR	eErrorFlag = ERR_NO;
+double		dSign = 1.0
+CalcTree *	opParent = NULL;
+
+vitrual CALC_NODE_TYPE	getType() = 0;
+virtual CALC_ERROR	checkSymbols() = 0;
+virtual unsigned short	getOpPrecedence() = 0;
+virtual CALC_OP_ASSOC	getOpAssocType() = 0;
+virtual double		count() = 0;
+virtual string		print(size_t & idx) = 0;
+virtual bool		appendNode(CalcTree * opNode) = 0;
+void			detach() { opParent = NULL; }
+
+
+Klasa abstrakcyjna po której dziedzicz¹ wszystkie rodzaje wêz³ów. Zapewnia metody getType() - pobranie typu wêz³a, checkSymbols() - sprawdzenie i oflagowanie niezdefiniowanych symboli, getOpPrecedence() - pobranie wa¿noœci operatora, getOpAssocSide() - pobranie rodzaju ³¹cznoœci operatora (prawostronna, lewostronna), count() - obliczenie w³asnej wartoœci i jeœli trzeba flagowanie b³êdu i wyrzucenie wyj¹tku, print(size_r & idx) - wypisanie "w³asnego" wyra¿enia i przesuniêcie przekazanego przez referencjê indeksu, appendNode(CalcTree * opNode) - zapisuje podany wêze³ jako argument (dla operatorów unarnych) lub jako drugi argument (dla operatorów binarnych) i ustawia w nim siebie jako wskaŸnik do rodzica
+
+wymagane metody klas pokrewnych:
+
+- implementacje metod wirtualnych

@@ -1,0 +1,118 @@
+Tworzenie:
+
+#define PARAM_FLAG(flags) "f"flags
+#define PARAM_VALUE "v"
+
+gVarEngine.add("deg", 1, true);    - true dla flagi
+gFunctEngine.add("sin", wskaŸnik, PARAM_VALUE, PARAM_FLAG("deg;rad;grad"));
+
+Struktura funkcji:
+string szName
+wskaŸnik
+Params * params
+Numparams
+
+Params:
+string * flags
+numflags
+
+
+Zmienna:
+
+if ((idx = gVarEngine.getIdx(szName)) == VarEngine::nidx)
+	throw nieznana zmienna;
+
+if (gVarEngine[idx].bIsSpecial)
+	throw z³e u¿ycie flagi;
+
+return gVarEngine[idx].dValue;
+
+Funkcja:
+
+
+if ((idx = gFunctEngine.getIdx(szName, oParamsVector.size())) == FunctEndine::nidx)
+	throw nieznana funkcja;
+
+for (auto const & param : oParamsVector)
+{
+	try
+	{
+		if (gFunctEngine[idx].paramIsFlag(i))  // gFunctEngine[idx].param[i].isFlag(i++)
+		{
+			if (param->getType() != NODE_VAR)
+				throw CalcError(oczekiwana flaga, param->begIdx, param->endIdx);
+
+			CalcTreeVar * opVar = dynamic_cast<CalcTreeVar *>param;
+			
+			if (!gFunctEngine[idx].paramHasFlag(i, opVar->getName()))
+				throw CalcError(niewlasciwa flaga, param->begIdx, param->endIdx);
+		
+			zapisane wartoœci parametrów <- opVar->flagCount();
+		}
+		else
+		{
+			zapisane wartoœci parametrów <- param->count();	
+		}
+		i++;	
+	}
+	catch
+	{
+		³ap b³êdy i zapisuj;
+	}
+}
+
+S³abe punkty:
+- dodatkowa funkcja paramHasFlag(nr, nazwa flagi)
+- dodatkowa funkcja flagCount() (brrrrrr)
+- zg³aszanie b³êdu "za dziecko"
+- skomplikowana struktura funkcji
+
+################################################################### ALBO ###################################################################
+
+Tworzenie:
+
+gVarEngine.add("deg", 1, "sin=2@1;cos=2@1;tan=2@1;asin=2@1;lol=3@1;lol=3@2");   - "[nazwa]=[liczba parametrów]@[parametr]
+gFunctEngine.add("sin", wskaŸnik, "vf")	   - kolejne litery oznaczaj¹ kolejne parametry; v - zwyk³a wartoœæ, f - flaga
+albo
+gFunctEngine.add("sin", wskaŸnik, PARAM_VALUE, PARAM_FLAG);
+
+
+Zmienna:
+
+if ((idx = gVarEngine.getIdx(szName)) == VarEngine::nidx)
+	throw nieznana zmienna;
+
+if (gVarEngine[idx].bIsSpecial && (opParent->getType != NODE_FUNCT || !gVarEngine[idx].isLinkedTo((CalcTreeFunct*)opFunct->getSignature(this)))
+	throw z³e u¿ycie flagi;
+
+return gVarEngine[idx].dValue;
+
+tyle xD
+
+
+Funkcja:
+
+
+if ((idx = gFunctEngine.getIdx(szName, oParamsVector.size())) == FunctEngine::nidx)
+	throw nieznana funkcja;
+
+for (auto const & param : oParamsVector)
+{
+	try
+	{
+		if (gFunctEngine[idx].paramIsFlag(i) && param->getType() != NODE_VAR)
+			throw CalcError(oczekiwana flaga, param->begIdx, param->endIdx);
+		
+		zapisane wartoœci parametrów <- param->count();		
+	}
+	catch
+	{
+		³ap b³êdy i zapisuj;
+	}
+	i++;
+}
+
+S³abe punkty:
+- koniecznoœæ dodania getSignature, które szuka gdzie jest podany wskaŸnik (brrrrrr, tragedia)
+- zg³aszanie b³êdu "za dziecko"
+- dziwaczne oznaczanie flag w zmiennych - podawanie ich w zmiennych, a nie funkcji

@@ -1,0 +1,40 @@
+idx = FunctEngine.add("tan", tan, "taki tam tangens", "tangens;tg");
+FunctEngine[idx].addParam(FunctEngine::param::val);
+
+idx = FunctEngine.add("tan", tan, "taki tam tangens", "tangens;tg");
+FunctEngine[idx].addParam(FunctEngine::param::val);
+FunctEngine[idx].addParam(FunctEngine::param::flag("deg;rad;grad"), "rad");
+
+idx = FunctEngine.add("min", min, "minimum podanych argumentów", "minimum");
+FunctEngine[idx].addParam(FunctEngine::param::va_list);
+
+
+pow(2,5)
+min(1,2,3,4-7,8)
+max(3,pi,e)
+sqrt(5)
+root(4, 16)
+root(5)
+sin(pi), cos, tan, cot, sec, csc + odpowiedniki cyklometryczne, hiperboliczne, area
+sin(pi, rad)
+std_dev(4, 5, 6, 7, 2, 5)
+log2(8)
+log10(100)
+log(4,5);
+ln(5)
+abs(4)
+gamma(4)
+zaokr¹glenie: round(x, digits = n)
+zaokr¹glenie do n cyfr znacz¹cych: signif(x, digits = n)
+zaokr¹glenie w dó³: floor(x)
+zaokr¹glenie w górê: ceiling(x)
+zaokr¹glenie w kierunku zera: trunc(x)
+exp(4)
+newton(5,6)
+
+
+>sin<(deg, 8) <- niepoprawne parametry funkcji "sin" (opis - @fdesc sin)
+>sin<(deg, deg) <- niepoprawne parametry funkcji "sin"
+sin((>deg<), deg) <- nieznana zmienna deg
+sin(8, >sraka<) <- nieznana flaga "sraka"
+sin(>sro<, >sro2<) <- znieznana zmienna "sro2", nieznana flaga "sro2" (opis - @fdesc sin)

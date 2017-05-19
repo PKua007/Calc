@@ -1,0 +1,41 @@
+PSEUDOKOD PARSERA:
+
+
+Parser bazuje na wkaŸnikach (abstrakcyjnej ?) klasy *CalcTree, które wskazuj¹ na obiekty jednej z klas pochodnych. Nie ma rozró¿nienia w obs³udze poszczególnych typów, wiêc ³atwo siê dopisuje/podmiania poszczególne wêz³y drzewa. Parser sam tworzy obiekt i zapisuje wskaŸnik do niego.
+
+wartoœæ - pod tym jest rozumiana liczba, zmienna, funkcja, wyra¿enie w nawiasie pobierane rekurencyjnie
+
+ClacTree * opTree;
+CalcTree * opCurentNode;
+CalcTree * opNewNode;
+CalcTree * opParentNode;
+opTree = opCurrentNode <- getVal()  // pobierz pierwsz¹ wartoœæ z uwzglêdnieniem minusa unarnego
+
+powtarzaj a¿ do koñca wyra¿enia
+{
+	pobierz operator
+	jeœli unarny
+	{
+		jeœli ³¹czny lewostronnie
+			przesuwaj w górê drzewa opCurrentNode, a¿ wêze³-rodzic jest o NI¯SZYM priorytecie lub jest pocz¹tkiem
+		jeœli ³¹czny prawostronnie
+			przesuwaj w górê drzewa opCurrentNode, a¿ wêze³-rodzic jest o NI¯SZYM LUB RÓWNYM priorytecie lub jest pocz¹tkiem
+
+		opParent <- opCurrentNode->getParent() lub opTree jeœli brak rodzica
+		opCurrentNode->detach()		// od³¹cz obecny wêze³ od rodzica
+		opParant->appendNode (utwórz obiekt adekwatny do operatora z dzieckiem opCurrentNode)
+	}
+	jeœli binarny
+	{
+		opNewNode <- pobierz nastêpn¹ wartoœæ z uwzglêdnieniem minusa unarnego
+
+		jeœli ³¹czny lewostronnie
+			przesuwaj w górê drzewa opCurrentNode, a¿ wêze³-rodzic jest o NI¯SZYM priorytecie lub jest pocz¹tkiem
+		jeœli ³¹czny prawostronnie
+			przesuwaj w górê drzewa opCurrentNode, a¿ wêze³-rodzic jest o NI¯SZYM LUB RÓWNYM priorytecie lub jest pocz¹tkiem
+
+		opParent <- opCurrentNode->getParent() lub opTree jeœli brak rodzica
+		opCurrentNode->detach();		// od³¹cz obecny wêze³ od rodzica
+		opParent->appendNode <- utwórz obiekt adekwatny do operatora z dzieæmi (opCurrentNode, opNewNode);
+	}
+}

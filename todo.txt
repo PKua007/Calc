@@ -1,0 +1,13 @@
+TO DO:
+
+- obs³ugê ró¿nych trybów wyœweitlania liczb przez CalcTree::print			GOTOWE
+- zerowanie wskaŸników do dzieci po próbie podwójnego przypisania rodzica		REZYGNACJA
+- inna klasa b³êdów dla b³êdów deweloperskich						GOTOWE
+- rozwi¹zaæ problem liczb spoza zakresu przy parsingu / interpretacji			GOTOWE :D			
+- wpisanie polskiego znaku crashuje							w wersji release dzia³¹
+- dodaæ obs³ugê wyra¿eñ typu 2+e(60+4) - nie ma funkcji e(), ale jest zmienna e,	GOTOWE
+  ma byæ wiêc potraktowane jako 2+e*(60+4)						
+- 5e5_50 - wyrzuca "niespodziewany _"							
+- dodaæ obs³ugê ró¿nych nawiasów							chyba zaniecham					
+- sprawdziæ, czy po przekazaniu stringa do parsera nie jest usuwany wraz ze zmienn¹	GOTOWE
+- ulepszyæ funkcjê newton
